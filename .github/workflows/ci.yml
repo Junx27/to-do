@@ -1,31 +1,17 @@
-name: Test and Coverage
+name: CI and Coverage to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   pull_request:
-    branches: ["main"]
+    branches: [main]
+
+permissions:
+  contents: write
 
 jobs:
-  test:
+  test-and-deploy:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:15
-        ports: ["5432:5432"]
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testdb
 
     steps:
       - name: Checkout code
@@ -42,18 +28,15 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov
 
-      - name: Run tests with coverage
+      - name: Run tests and generate coverage report
         run: |
-          PYTHONPATH=. pytest --cov=app --cov-report=html
+          pytest --cov=app --cov-report=html
 
-      - name: Upload HTML coverage report as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-coverage-report
-          path: htmlcov/
+      - name: List coverage report
+        run: ls -lah htmlcov
 
-      - name: Deploy coverage report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy HTML coverage to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./htmlcov

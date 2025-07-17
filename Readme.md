@@ -14,4 +14,16 @@ How to stop this project?
 docker-compose down
 ```
 
+How to run test?
+
+```bash
+pytest --cov=app --cov-report=html
+```
+
+How to see coverage?
+
+```bash
+open ./htmlcov/index.html
+```
+
 try it!

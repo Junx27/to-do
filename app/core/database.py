@@ -12,10 +12,10 @@ SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 
 
-# Dependency
-def get_db():
+def get_db():  # pragma: no cover
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+

@@ -1,10 +1,10 @@
-name: Run Python Tests
+name: Run Tests & Deploy Coverage
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   pull_request:
-    branches: ["main"]
+    branches: [main]
 
 jobs:
   test:
@@ -41,12 +41,14 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov
 
-      - name: Run tests and generate coverage HTML
+      - name: Run Tests and Generate Coverage HTML
         run: |
           PYTHONPATH=. pytest --cov=app --cov-report=html
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+      - name: Deploy coverage to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: html-coverage-report
-          path: htmlcov/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./htmlcov
+          publish_branch: gh-pages

@@ -1,25 +1,26 @@
-name: Run Tests
+name: Run Python Tests
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   pull_request:
-    branches: [main]
+    branches: ["main"]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     env:
       DATABASE_URL: "sqlite:///:memory:"
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -27,6 +28,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov
 
-      - name: Run tests
+      - name: Run tests with coverage
         run: |
-          pytest --cov=app --cov-report=term-missing
+          PYTHONPATH=. pytest --cov=app --cov-report=term-missing

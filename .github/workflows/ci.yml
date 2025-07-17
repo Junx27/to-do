@@ -1,10 +1,10 @@
-name: Run Tests & Deploy Coverage
+name: Test and Coverage
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   pull_request:
-    branches: [main]
+    branches: ["main"]
 
 jobs:
   test:
@@ -28,7 +28,8 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testdb
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -41,15 +42,18 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov
 
-      - name: Run Tests and Generate Coverage HTML
+      - name: Run tests with coverage
         run: |
           PYTHONPATH=. pytest --cov=app --cov-report=html
 
-      - name: Deploy coverage to GitHub Pages
-        if: github.ref == 'refs/heads/main'
+      - name: Upload HTML coverage report as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: html-coverage-report
+          path: htmlcov/
+
+      - name: Deploy coverage report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./htmlcov
-          publish_branch: gh-pages
-          force_orphan: true

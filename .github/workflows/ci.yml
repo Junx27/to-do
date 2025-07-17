@@ -1,17 +1,14 @@
-name: Test and Upload Coverage to GitHub Pages
+name: Run Tests and Deploy Coverage to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   pull_request:
-    branches: [main]
+    branches: ["main"]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
 
     services:
       postgres:
@@ -29,13 +26,12 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testdb
-      PYTHONPATH: .
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -46,9 +42,15 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov
 
-      - name: Run tests and generate coverage HTML
+      - name: Run tests and generate HTML coverage
         run: |
-          pytest --cov=app --cov-report=html
+          PYTHONPATH=. pytest --cov=app --cov-report=html
+
+      - name: List contents of coverage folder
+        run: |
+          echo "Verifying htmlcov folder..."
+          ls -lah htmlcov
+          test -f htmlcov/index.html
 
       - name: Upload coverage to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -56,4 +58,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./htmlcov
           publish_branch: gh-pages
-          force_orphan: true

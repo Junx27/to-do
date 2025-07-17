@@ -1,29 +1,19 @@
-## Todo List Use Phyton
+## 🧩 To-Do App Docker Image
 
-This is a simple CRUD app using Phyton
+A lightweight and production-ready Docker image for the To-Do REST API built with **FastAPI** and **PostgreSQL**.
 
-How to run this project?
+Ideal for developers and teams who want to quickly deploy, test, or integrate a modular task management backend using modern Python web technologies.
 
-```bash
-docker-compose up
-```
+### ✅ Features
 
-How to stop this project?
+- FastAPI-based RESTful API
+- PostgreSQL support (via `DATABASE_URL`)
+- Fully containerized and easy to deploy
+- Tested with `pytest` and coverage included
+- CI/CD integrated via GitHub Actions
 
-```bash
-docker-compose down
-```
-
-How to run test?
+### 🚀 How to Use
 
 ```bash
-pytest --cov=app --cov-report=html
+docker pull ghcr.io/junx27/to-do:latest
 ```
-
-How to see coverage?
-
-```bash
-open ./htmlcov/index.html
-```
-
-try it!

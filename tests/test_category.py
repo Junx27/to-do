@@ -17,7 +17,7 @@ def test_create_category():
 def test_get_categories():
     response = client.get("/api/v1/category")
     assert response.status_code == 200
-    assert isinstance(response.jspn()["data"], list)
+    assert isinstance(response.json()["data"], list)
 
 def test_update_category():
     response = client.post("/api/v1/category", json={
@@ -25,7 +25,7 @@ def test_update_category():
     })
 
     category_id = response.json()["data"]["id"]
-    response = client.put(f"/api/v1/category/{category_id}", {
+    response = client.put(f"/api/v1/category/{category_id}", json={
         "name": "Second"
     })
 
@@ -49,7 +49,7 @@ def test_delete_category():
     assert response.status_code == 200
 
 def test_update_non_exist():
-    response = client.put("/api/v1/category/-1", {
+    response = client.put("/api/v1/category/-1", json={
         "name": "Not found"
     })
     assert response.status_code == 404

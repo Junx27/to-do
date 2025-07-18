@@ -61,6 +61,6 @@ def test_get_non_exist():
     assert response.json()["message"] == "Not found"
 
 def test_delete_non_exist():
-    response = client.get("/api/v1/category/-1")
+    response = client.delete("/api/v1/category/-1")
     assert response.status_code == 404
     assert response.json()["message"] == "Not found"

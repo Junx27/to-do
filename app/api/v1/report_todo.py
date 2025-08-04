@@ -10,7 +10,7 @@ router = APIRouter()
 @router.post("/report-todo")
 def create_report_todo(report_todo: ReportTodoCreate, db: Session = Depends(get_db)):
     result = report_todo_service.create_report_todo_service(db, report_todo)
-    return success_response(data=ReportTodoOut.model_validate(result).model_dump(), message="OK")
+    return success_response(data=ReportTodoOut.model_validate(result).model_dump(), message="OK", status_code=201)
 
 @router.get("/report-todo")
 def get_all_report_todo(db: Session = Depends(get_db)):

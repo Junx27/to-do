@@ -57,7 +57,7 @@ def test_update_report_todo_by_id():
     assert response.status_code == 200
     assert response.json()["data"]["id"] == report_todo_id
 
-def test_delete_status_todo_by_id():
+def test_delete_report_todo_by_id():
     response_todo = client.post("/api/v1/todos", json={
         "name": "Test Todo",
         "description": "Testing purpose"
@@ -71,17 +71,12 @@ def test_delete_status_todo_by_id():
     response = client.delete(f"/api/v1/report-todo/{report_todo_id}")
     assert response.status_code == 200
 
-def test_get_status_todo_not_found():
+def test_get_report_todo_not_found():
     response = client.get("/api/v1/report-todo/-1")
     assert response.status_code == 404
     assert response.json()["message"] == "Not found"
 
-def test_update_status_todo_not_found():
-    response_todo = client.post("/api/v1/todos", json={
-        "name": "Test Todo",
-        "description": "Testing purpose"
-    })
-    todo_id = response_todo.json()["data"]["id"]
+def test_update_report_todo_not_found():
     response = client.put("/api/v1/report-todo/-1", json={
         "status": "OK",
         "todo_id": todo_id
@@ -89,7 +84,7 @@ def test_update_status_todo_not_found():
     assert response.status_code == 404
     assert response.json()["message"] == "Not found"
 
-def test_delete_status_todo_not_found():
+def test_delete_report_todo_not_found():
     response = client.delete("/api/v1/report-todo/-1")
     assert response.status_code == 404
     assert response.json()["message"] == "Not found"

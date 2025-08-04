@@ -77,6 +77,11 @@ def test_get_report_todo_not_found():
     assert response.json()["message"] == "Not found"
 
 def test_update_report_todo_not_found():
+    response_todo = client.post("/api/v1/todos", json={
+        "name": "Test Todo",
+        "description": "Testing purpose"
+    })
+    todo_id = response_todo.json()["data"]["id"]
     response = client.put("/api/v1/report-todo/-1", json={
         "status": "OK",
         "todo_id": todo_id

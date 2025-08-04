@@ -83,7 +83,7 @@ def test_update_report_todo_not_found():
     })
     todo_id = response_todo.json()["data"]["id"]
     response = client.put("/api/v1/report-todo/-1", json={
-        "status": "OK",
+        "percentage": 100,
         "todo_id": todo_id
     })
     assert response.status_code == 404
